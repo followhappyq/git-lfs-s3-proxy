@@ -22,7 +22,10 @@ async function sign(s3, bucket, path, method) {
 function parseAuthorization(req) {
   const auth = req.headers.get("Authorization");
   if (!auth) {
-    throw new Response(null, { status: 401 });
+    throw new Response(null, {
+      status: 401,
+      headers: { "WWW-Authenticate": 'Basic realm="git-lfs"' },
+    });
   }
 
   const [scheme, encoded] = auth.split(" ");
@@ -130,4 +133,14 @@ async function fetch(req, env) {
   });
 }
 
-export default { fetch };
+export default {
+  async fetch(req, env) {
+    try {
+      return await fetch(req, env);
+    } catch (e) {
+      // Early exits throw a Response; return it instead of failing with 500.
+      if (e instanceof Response) return e;
+      throw e;
+    }
+  },
+};

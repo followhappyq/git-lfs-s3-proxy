@@ -1,7 +1,8 @@
 {
   // Worker config for Cloudflare Workers Builds (gve LFS proxy).
-  "name": "gve-lfs",
+  "name": "git-lfs-s3-proxy",
   "main": "_worker.js",
   "compatibility_date": "2025-11-01",
-  "workers_dev": true
+  "workers_dev": true,
+  "preview_urls": false
 }
